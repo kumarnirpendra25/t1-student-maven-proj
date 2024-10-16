@@ -27,14 +27,14 @@
   </build>
    <distributionManagement>
         <repository>
-            <id>deployment</id>
+            <id>test01</id>
             <name>Internal Releases</name>
-            <url>http://10.142.0.11:8081/repository/student-releases/</url>
+            <url>https://pkgs.dev.azure.com/kumarnirpendra25/_packaging/test01/maven/v1/</url>
         </repository>
         <snapshotRepository>
-            <id>deployment</id>
+            <id>test01</id>
             <name>Internal Snapshot Releases</name>
-            <url>http://10.142.0.11:8081/repository/student-snapshots/</url>
+            <url>https://pkgs.dev.azure.com/kumarnirpendra25/_packaging/test01/maven/v1</url>
         </snapshotRepository>
     </distributionManagement>
   <dependencies>
