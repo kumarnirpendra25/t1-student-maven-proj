@@ -26,16 +26,16 @@
     </plugins>
   </build>
    <distributionManagement>
-        <repository>
-  <id>test01</id>
-  <url>https://pkgs.dev.azure.com/kumarnirpendra25/_packaging/test01/maven/v1</url>
-  <releases>
+      <repository>
+        <id>test01</id>
+       <url>https://pkgs.dev.azure.com/kumarnirpendra25/_packaging/test01/maven/v1</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+   <snapshots>
     <enabled>true</enabled>
-  </releases>
-  <snapshots>
-    <enabled>true</enabled>
-  </snapshots>
-</repository>
+    </snapshots>
+   </repository>
     </distributionManagement>
   <dependencies>
   	<dependency>
