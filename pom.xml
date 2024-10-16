@@ -26,11 +26,6 @@
     </plugins>
   </build>
    <distributionManagement>
-        <repository>
-            <id>test01</id>
-            <name>Internal Releases</name>
-            <url>https://pkgs.dev.azure.com/kumarnirpendra25/_packaging/test01/maven/v1/</url>
-        </repository>
         <snapshotRepository>
             <id>test01</id>
             <name>Internal Snapshot Releases</name>
