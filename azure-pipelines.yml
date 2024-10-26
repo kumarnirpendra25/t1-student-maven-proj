@@ -1,15 +1,3 @@
-# azure-pipelines.yml
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
-trigger:
-  - master
-
-pool:
-  vmImage: 'ubuntu-latest'
-
 stages:
   - stage: build
     displayName: 'Build Stage'
@@ -27,8 +15,10 @@ stages:
               mavenAuthenticateFeed: false
               effectivePomSkip: false
               sonarQubeRunAnalysis: false
+      
       - job: copy
         displayName: 'Copy Job'
+        dependsOn: build  # Ensures 'copy' runs only after 'build' completes
         steps:
           - task: CopyFiles@2
             displayName: 'Copy WAR Files'
@@ -36,8 +26,10 @@ stages:
               SourceFolder: '$(System.DefaultWorkingDirectory)'
               Contents: '**/*.war'
               TargetFolder: '$(Build.ArtifactStagingDirectory)'
+      
       - job: publish
         displayName: 'Publish Job'
+        dependsOn: copy  # Ensures 'publish' runs only after 'copy' completes
         steps:
           - task: PublishBuildArtifacts@1
             displayName: 'Publish Artifacts'
