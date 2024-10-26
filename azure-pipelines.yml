@@ -9,28 +9,25 @@ stages:
             displayName: 'Run Maven Build'
             inputs:
               mavenPomFile: 'pom.xml'
+              goals: 'clean package'
               publishJUnitResults: false
               javaHomeOption: 'JDKVersion'
               mavenVersionOption: 'Default'
-              mavenAuthenticateFeed: false
-              effectivePomSkip: false
-              sonarQubeRunAnalysis: false
-              goals: package
       
       - job: copy
-        displayName: 'Copy '
-        dependsOn: build  # Ensures 'copy' runs only after 'build' completes
+        displayName: 'Copy Job'
+        dependsOn: build
         steps:
           - task: CopyFiles@2
             displayName: 'Copy WAR Files'
             inputs:
-              SourceFolder: '$(System.DefaultWorkingDirectory)'
+              SourceFolder: '$(System.DefaultWorkingDirectory)/target'
               Contents: '**/*.war'
               TargetFolder: '$(Build.ArtifactStagingDirectory)'
       
       - job: publish
         displayName: 'Publish Job'
-        dependsOn: copy  # Ensures 'publish' runs only after 'copy' completes
+        dependsOn: copy
         steps:
           - task: PublishBuildArtifacts@1
             displayName: 'Publish Artifacts'
