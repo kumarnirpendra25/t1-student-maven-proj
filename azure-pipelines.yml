@@ -27,12 +27,6 @@ stages:
               mavenAuthenticateFeed: false
               effectivePomSkip: false
               sonarQubeRunAnalysis: false
-
-  - stage: copy
-    displayName: 'Copy Stage'
-    dependsOn: build
-    condition: succeeded('build')  # Ensures the stage runs only if the build stage succeeds
-    jobs:
       - job: copy
         displayName: 'Copy Job'
         steps:
@@ -42,12 +36,6 @@ stages:
               SourceFolder: '$(System.DefaultWorkingDirectory)'
               Contents: '**/*.war'
               TargetFolder: '$(Build.ArtifactStagingDirectory)'
-
-  - stage: publish
-    displayName: 'Publish Stage'
-    dependsOn: copy
-    condition: succeeded('copy')  # Ensures the stage runs only if the copy stage succeeds
-    jobs:
       - job: publish
         displayName: 'Publish Job'
         steps:
