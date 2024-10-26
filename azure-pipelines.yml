@@ -1,46 +1,59 @@
+# azure-pipelines.yml
 # Starter pipeline
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
 trigger:
-- master
+  - master
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
 
 stages:
   - stage: build
+    displayName: 'Build Stage'
     jobs:
-     - job: build
-       steps:
-       - task: Maven@4
-         displayName: maven
-         inputs:
-          mavenPomFile: 'pom.xml'
-          publishJUnitResults: false
-          javaHomeOption: 'JDKVersion'
-          mavenVersionOption: 'Default'
-          mavenAuthenticateFeed: false
-          effectivePomSkip: false
-          sonarQubeRunAnalysis: false
+      - job: build
+        displayName: 'Build Job'
+        steps:
+          - task: Maven@4
+            displayName: 'Run Maven Build'
+            inputs:
+              mavenPomFile: 'pom.xml'
+              publishJUnitResults: false
+              javaHomeOption: 'JDKVersion'
+              mavenVersionOption: 'Default'
+              mavenAuthenticateFeed: false
+              effectivePomSkip: false
+              sonarQubeRunAnalysis: false
+
   - stage: copy
+    displayName: 'Copy Stage'
+    dependsOn: build
+    condition: succeeded('build')  # Ensures the stage runs only if the build stage succeeds
     jobs:
       - job: copy
-        displayName: copy
+        displayName: 'Copy Job'
         steps:
           - task: CopyFiles@2
+            displayName: 'Copy WAR Files'
             inputs:
-              SourceFolder: '$(system.defaultworkingdirectory)'
+              SourceFolder: '$(System.DefaultWorkingDirectory)'
               Contents: '**/*.war'
-              TargetFolder: '$(build.artifactstagingdirectory)'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
   - stage: publish
+    displayName: 'Publish Stage'
+    dependsOn: copy
+    condition: succeeded('copy')  # Ensures the stage runs only if the copy stage succeeds
     jobs:
-    - job: publish
-      displayName: publish
-      steps:
-        - task: PublishBuildArtifacts@1
-          inputs:
-            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-            ArtifactName: 'drop'
-            publishLocation: 'Container'
+      - job: publish
+        displayName: 'Publish Job'
+        steps:
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Artifacts'
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'drop'
+              publishLocation: 'Container'
