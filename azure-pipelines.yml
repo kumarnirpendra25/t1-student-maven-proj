@@ -24,3 +24,13 @@ stages:
           mavenAuthenticateFeed: false
           effectivePomSkip: false
           sonarQubeRunAnalysis: false
+  - stage: copy
+    jobs:
+      - job: copy
+        displayName: copy
+        steps:
+          - task: CopyFiles@2
+            inputs:
+              SourceFolder: '$(agent.builddirectory)'
+              Contents: '**/*.war'
+              TargetFolder: '$(build.artifactstagingdirectory)'
