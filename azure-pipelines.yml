@@ -15,9 +15,10 @@ stages:
               mavenAuthenticateFeed: false
               effectivePomSkip: false
               sonarQubeRunAnalysis: false
+              goals: package
       
       - job: copy
-        displayName: 'Copy Job'
+        displayName: 'Copy '
         dependsOn: build  # Ensures 'copy' runs only after 'build' completes
         steps:
           - task: CopyFiles@2
