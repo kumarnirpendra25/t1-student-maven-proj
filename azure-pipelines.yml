@@ -21,7 +21,7 @@ stages:
           - task: CopyFiles@2
             displayName: 'Copy WAR Files'
             inputs:
-              SourceFolder: '$(System.DefaultWorkingDirectory)/target'  # Ensures it looks in the correct target directory
+              SourceFolder: '$(System.DefaultWorkingDirectory)'  # Ensures it looks in the correct target directory
               Contents: '**/*.war'
               TargetFolder: '$(Build.ArtifactStagingDirectory)'
       
