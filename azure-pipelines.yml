@@ -30,3 +30,24 @@ stages:
             PathtoPublish: '$(Build.ArtifactStagingDirectory)'
             ArtifactName: 'drop'
             publishLocation: 'Container'
+  - stage: Release
+    displayName: Release
+    jobs:
+    - deployment: 
+      environment: dev
+      strategy:
+       runOnce:
+         deploy:
+           steps:
+             - task: AzureRmWebAppDeployment@4
+               inputs:
+                 ConnectionType: 'AzureRM'
+                 azureSubscription: 'Free Trial(98391885-1dc7-4963-93d0-7590a267b3f7)'
+                 appType: 'webAppLinux'
+                 WebAppName: 'web000'
+                 packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.war'
+  
+
+      
+
+   
