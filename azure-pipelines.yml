@@ -1,37 +1,6 @@
-stages:
-  - stage: build
-    displayName: 'Build Stage'
-    jobs:
-      - job: build
-        displayName: 'Build Job'
-        steps:
-          - task: Maven@4
-            displayName: 'Run Maven Build'
-            inputs:
-              mavenPomFile: 'pom.xml'
-              goals: 'clean package'  # This command will build the .war file if the packaging is set to war in pom.xml
-              publishJUnitResults: false
-              javaHomeOption: 'JDKVersion'
-              mavenVersionOption: 'Default'
-      
-      - job: copy
-        displayName: 'Copy Job'
-        dependsOn: build
-        steps:
-          - task: CopyFiles@2
-            displayName: 'Copy WAR Files'
-            inputs:
-              SourceFolder: '$(System.DefaultWorkingDirectory)'  # Ensures it looks in the correct target directory
-              Contents: '**/*.war'
-              TargetFolder: '$(Build.ArtifactStagingDirectory)'
-      
-      - job: publish
-        displayName: 'Publish Job'
-        dependsOn: copy
-        steps:
-          - task: PublishBuildArtifacts@1
-            displayName: 'Publish Artifacts'
-            inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-              ArtifactName: 'drop'
-              publishLocation: 'Container'
+trigger:
+- master
+pool:
+ vmimage: ubuntu-latest
+steps:
+  - script:  echo "first pipeline"
