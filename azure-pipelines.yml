@@ -1,20 +1,32 @@
 trigger:
-- main
-
+- master
 pool:
-  vmImage: ubuntu-latest
-parameters:
-  - name: buildConfiguration
-    type: string
-    default: 'Release'
-    displayName: 'Build Configuration'
-  
-jobs:
-- job: Build
-  displayName: "Build Job"
-  pool:
-    vmImage: 'ubuntu-latest'
-  steps:
-  - script: |
-      echo "Building with configuration: ${{ parameters.buildConfiguration }}"      
-    displayName: "Print Build Configuration"
+  vmimage: ubuntu-latest
+stages:
+  - stage: build
+    displayName: build
+    jobs:
+    - job: build
+      displayName: build
+      steps:
+        - task: Maven@4
+          inputs:
+            mavenPomFile: 'pom.xml'
+            publishJUnitResults: false
+            javaHomeOption: 'JDKVersion'
+            mavenVersionOption: 'Default'
+            mavenAuthenticateFeed: false
+            effectivePomSkip: false
+            sonarQubeRunAnalysis: false
+            goals: package
+        
+        - task: CopyFiles@2
+          inputs:
+            SourceFolder: '$(agent.builddirectory)'
+            Contents: '**/*.war'
+            TargetFolder: '$(build.artifactstagingdirectory)'
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+            ArtifactName: 'drop'
+            publishLocation: 'Container'
